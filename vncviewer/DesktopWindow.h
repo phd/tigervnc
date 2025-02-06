@@ -83,6 +83,7 @@ public:
   // Grab keyboard events from desktop environment
   void grabKeyboard();
   void ungrabKeyboard();
+  void toggleForceGrab();
 
 private:
   void addOverlayTip(const char *text, ...)
@@ -145,8 +146,8 @@ private:
 
   bool keyboardGrabbed;
   bool mouseGrabbed;
-
   bool regrabOnFocus;
+  bool forceGrabbed;
 
   struct statsEntry {
     unsigned ups;

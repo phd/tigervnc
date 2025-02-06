@@ -695,6 +695,11 @@ void Viewport::handleKeyPress(int systemKeyCode,
 {
   pressedKeys.insert(systemKeyCode);
 
+  // Right Ctrl
+  if (keySym == FL_Control_R) {
+    return;
+  }
+
   // Possible keyboard shortcut?
 
   if (!shortcutBypass) {
@@ -891,6 +896,12 @@ void Viewport::sendKeyRelease(int systemKeyCode,
 
   if (viewOnly)
     return;
+
+  // Right Ctrl
+  if (keySym == FL_Control_R) {
+    ((DesktopWindow*)window())->toggleForceGrab();
+    return;
+  }
 
   try {
     cc->sendKeyRelease(systemKeyCode);
