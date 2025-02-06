@@ -366,19 +366,19 @@ void Viewport::pushLEDState()
       (cc->server.ledState() & rfb::ledCapsLock)) {
     vlog.debug("Inserting fake CapsLock to get in sync with server");
     sendKeyPress(FAKE_KEY_CODE, 0x3a, XK_Caps_Lock);
-    sendKeyRelease(FAKE_KEY_CODE);
+    sendKeyRelease(FAKE_KEY_CODE, 0x3a, XK_Caps_Lock);
   }
   if ((ledState & rfb::ledNumLock) !=
       (cc->server.ledState() & rfb::ledNumLock)) {
     vlog.debug("Inserting fake NumLock to get in sync with server");
     sendKeyPress(FAKE_KEY_CODE, 0x45, XK_Num_Lock);
-    sendKeyRelease(FAKE_KEY_CODE);
+    sendKeyRelease(FAKE_KEY_CODE, 0x45, XK_Num_Lock);
   }
   if ((ledState & rfb::ledScrollLock) !=
       (cc->server.ledState() & rfb::ledScrollLock)) {
     vlog.debug("Inserting fake ScrollLock to get in sync with server");
     sendKeyPress(FAKE_KEY_CODE, 0x46, XK_Scroll_Lock);
-    sendKeyRelease(FAKE_KEY_CODE);
+    sendKeyRelease(FAKE_KEY_CODE, 0x46, XK_Scroll_Lock);
   }
 }
 
@@ -830,7 +830,8 @@ void Viewport::sendKeyPress(int systemKeyCode,
 }
 
 
-void Viewport::handleKeyRelease(int systemKeyCode)
+void Viewport::handleKeyRelease(int systemKeyCode,
+                                uint32_t keyCode, uint32_t keySym)
 {
   pressedKeys.erase(systemKeyCode);
 
@@ -880,11 +881,14 @@ void Viewport::handleKeyRelease(int systemKeyCode)
 
   // Normal key, so send to server...
 
-  sendKeyRelease(systemKeyCode);
+  sendKeyRelease(systemKeyCode, keyCode, keySym);
 }
 
-void Viewport::sendKeyRelease(int systemKeyCode)
+void Viewport::sendKeyRelease(int systemKeyCode,
+                              uint32_t keyCode, uint32_t keySym)
 {
+  (void)keyCode; // unused
+
   if (viewOnly)
     return;
 
@@ -1021,14 +1025,14 @@ void Viewport::popupContextMenu()
     if (m->value())
       sendKeyPress(FAKE_CTRL_KEY_CODE, 0x1d, XK_Control_L);
     else
-      sendKeyRelease(FAKE_CTRL_KEY_CODE);
+      sendKeyRelease(FAKE_CTRL_KEY_CODE, 0x1d, XK_Control_L);
     menuCtrlKey = !menuCtrlKey;
     break;
   case ID_ALT:
     if (m->value())
       sendKeyPress(FAKE_ALT_KEY_CODE, 0x38, XK_Alt_L);
     else
-      sendKeyRelease(FAKE_ALT_KEY_CODE);
+      sendKeyRelease(FAKE_ALT_KEY_CODE, 0x38, XK_Alt_L);
     menuAltKey = !menuAltKey;
     break;
   case ID_CTRLALTDEL:
@@ -1036,9 +1040,9 @@ void Viewport::popupContextMenu()
     sendKeyPress(FAKE_ALT_KEY_CODE, 0x38, XK_Alt_L);
     sendKeyPress(FAKE_DEL_KEY_CODE, 0xd3, XK_Delete);
 
-    sendKeyRelease(FAKE_DEL_KEY_CODE);
-    sendKeyRelease(FAKE_ALT_KEY_CODE);
-    sendKeyRelease(FAKE_CTRL_KEY_CODE);
+    sendKeyRelease(FAKE_DEL_KEY_CODE, 0xd3, XK_Delete);
+    sendKeyRelease(FAKE_ALT_KEY_CODE, 0x38, XK_Alt_L);
+    sendKeyRelease(FAKE_CTRL_KEY_CODE, 0x1d, XK_Control_L);
     break;
   case ID_REFRESH:
     cc->refreshFramebuffer();
