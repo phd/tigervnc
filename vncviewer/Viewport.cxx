@@ -235,7 +235,7 @@ void Viewport::setCursor(int width, int height, const Point& hotspot,
 
 void Viewport::showCursor()
 {
-  if (viewOnly) {
+  if (viewOnly || ungrabbedGrabOnlyMouse()) {
     window()->cursor(FL_CURSOR_DEFAULT);
     return;
   }
@@ -249,7 +249,7 @@ void Viewport::showCursor()
 
 void Viewport::handleClipboardRequest()
 {
-  if (viewOnly)
+  if (viewOnly || ungrabbedGrabOnlyKeyboard())
     return;
 
   Fl::paste(*this, clipboardSource);
@@ -257,7 +257,7 @@ void Viewport::handleClipboardRequest()
 
 void Viewport::handleClipboardAnnounce(bool available)
 {
-  if (viewOnly)
+  if (viewOnly || ungrabbedGrabOnlyKeyboard())
     return;
 
   if (!acceptClipboard)
@@ -314,7 +314,7 @@ void Viewport::setLEDState(unsigned int ledState)
     return;
   }
 
-  if (viewOnly)
+  if (viewOnly || ungrabbedGrabOnlyKeyboard())
     return;
 
   if (!hasFocus())
@@ -327,7 +327,7 @@ void Viewport::pushLEDState()
 {
   unsigned int ledState;
 
-  if (viewOnly)
+  if (viewOnly || ungrabbedGrabOnlyKeyboard())
     return;
 
   // Server support?
@@ -517,7 +517,7 @@ int Viewport::handle(int event)
 
 void Viewport::sendPointerEvent(const rfb::Point& pos, uint16_t buttonMask)
 {
-  if (viewOnly)
+  if (viewOnly || ungrabbedGrabOnlyMouse())
       return;
 
   if ((pointerEventInterval == 0) || (buttonMask != lastButtonMask)) {
@@ -553,7 +553,7 @@ void Viewport::handleClipboardChange(int source, void *data)
 
   assert(self);
 
-  if (viewOnly)
+  if (viewOnly || self->ungrabbedGrabOnlyKeyboard())
     return;
 
   if (!sendClipboard)
@@ -672,7 +672,7 @@ void Viewport::handleKeyPress(int systemKeyCode,
     return;
   }
 
-  if (viewOnly)
+  if (viewOnly || ungrabbedGrabOnlyKeyboard())
     return;
 
   try {
@@ -690,7 +690,7 @@ void Viewport::handleKeyRelease(int systemKeyCode,
   (void)keyCode; // unused
   (void)keySym; // unused
 
-  if (viewOnly)
+  if (viewOnly || ungrabbedGrabOnlyKeyboard())
     return;
 
   // Right Ctrl
@@ -899,4 +899,18 @@ void Viewport::handleOptions(void *data)
   self->setMenuKey();
   if (Fl::belowmouse() == self)
     self->showCursor();
+}
+
+bool Viewport::ungrabbedGrabOnlyKeyboard() const {
+  if (grabOnly || grabOnlyKeyboard) {
+    return !((DesktopWindow*)window())->isKeyboardGrabbed();
+  }
+  return false;
+}
+
+bool Viewport::ungrabbedGrabOnlyMouse() const {
+  if (grabOnly || grabOnlyMouse) {
+    return !((DesktopWindow*)window())->isMouseGrabbed();
+  }
+  return false;
 }
