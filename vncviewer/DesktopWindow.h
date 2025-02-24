@@ -85,6 +85,10 @@ public:
   void ungrabKeyboard();
   void toggleForceGrab();
 
+  bool isKeyboardGrabbed() const;
+  bool isMouseGrabbed() const;
+  bool isForceGrabbed() const;
+
 private:
   void addOverlayTip(const char *text, ...)
     __attribute__((__format__ (__printf__, 2, 3)));
