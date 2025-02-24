@@ -193,6 +193,20 @@ core::BoolParameter
   viewOnly("ViewOnly",
            _("Don't send any mouse or keyboard events to the server"),
            false);
+
+core::BoolParameter
+  grabOnlyKeyboard("GrabOnlyKeyboard",
+                   "Send keyboard events to the server only when keyboard grab is active.",
+                   false);
+core::BoolParameter
+  grabOnlyMouse("GrabOnlyMouse",
+                "Send mouse events to the server only when mouse grab is active.",
+                false);
+core::BoolParameter
+  grabOnly("GrabOnly",
+           "Activates both GrabOnlyKeyboard and GrabOnlyMouse.",
+           false);
+
 core::BoolParameter
   shared("Shared",
          _("Don't disconnect other viewers upon connection"),
@@ -206,6 +220,7 @@ core::BoolParameter
   sendClipboard("SendClipboard",
                 _("Send clipboard changes to the server"),
                 true);
+
 #if !defined(WIN32) && !defined(__APPLE__)
 core::BoolParameter
   setPrimary("SetPrimary",
@@ -280,6 +295,9 @@ static core::VoidParameter* parameterArray[] = {
   &fullScreenSelectedMonitors,
   /* Input */
   &viewOnly,
+  &grabOnlyKeyboard,
+  &grabOnlyMouse,
+  &grabOnly,
   &emulateMiddleButton,
   &alwaysCursor,
   &cursorType,
