@@ -268,7 +268,7 @@ void Viewport::showCursor()
 
 void Viewport::handleClipboardRequest()
 {
-  if (viewOnly || ungrabbedGrabOnlyKeyboard())
+  if (viewOnly)
     return;
 
   Fl::paste(*this, clipboardSource);
@@ -276,7 +276,7 @@ void Viewport::handleClipboardRequest()
 
 void Viewport::handleClipboardAnnounce(bool available)
 {
-  if (viewOnly || ungrabbedGrabOnlyKeyboard())
+  if (viewOnly)
     return;
 
   if (!acceptClipboard)
@@ -584,7 +584,7 @@ void Viewport::handleClipboardChange(int source, void *data)
 
   assert(self);
 
-  if (viewOnly || self->ungrabbedGrabOnlyKeyboard())
+  if (viewOnly)
     return;
 
   if (!sendClipboard)
