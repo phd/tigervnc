@@ -83,6 +83,8 @@ public:
   // Grab keyboard events from desktop environment
   void grabKeyboard();
   void ungrabKeyboard();
+  bool forceGrab();
+  bool forceUngrab();
   void toggleForceGrab();
 
   bool isKeyboardGrabbed() const;
