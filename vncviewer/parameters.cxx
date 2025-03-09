@@ -207,6 +207,11 @@ core::BoolParameter
            "Activates both GrabOnlyKeyboard and GrabOnlyMouse.",
            false);
 core::BoolParameter
+  grabToggleWithRightCtrl("GrabToggleWithRightCtrl",
+                          "Toggle mouse and keyboard grab by "
+                          "pressing the Right Ctrl key.",
+                          true);
+core::BoolParameter
   grabToggleWithMiddleButton("GrabToggleWithMiddleButton",
                              "Toggle mouse and keyboard grab by "
                              "middle-clicking on the window.",
@@ -308,6 +313,7 @@ static core::VoidParameter* parameterArray[] = {
   &grabOnlyKeyboard,
   &grabOnlyMouse,
   &grabOnly,
+  &grabToggleWithRightCtrl,
   &grabToggleWithMiddleButton,
   &grabWithMouseClick,
   &emulateMiddleButton,

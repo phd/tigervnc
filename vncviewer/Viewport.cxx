@@ -714,7 +714,7 @@ void Viewport::handleKeyPress(int systemKeyCode,
   pressedKeys.insert(systemKeyCode);
 
   // Right Ctrl
-  if (keySym == FL_Control_R) {
+  if (grabToggleWithRightCtrl && keySym == FL_Control_R) {
     return;
   }
 
@@ -916,7 +916,7 @@ void Viewport::sendKeyRelease(int systemKeyCode,
     return;
 
   // Right Ctrl
-  if (keySym == FL_Control_R) {
+  if (grabToggleWithRightCtrl && keySym == FL_Control_R) {
     ((DesktopWindow*)window())->toggleForceGrab();
     showCursor();
     return;
