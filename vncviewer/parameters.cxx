@@ -203,8 +203,12 @@ core::BoolParameter
                 "Send mouse events to the server only when mouse grab is active.",
                 false);
 core::BoolParameter
+  grabOnlyClipboard("GrabOnlyClipboard",
+                    "Allow clipboard operations only when keyboard grab is active.",
+                    false);
+core::BoolParameter
   grabOnly("GrabOnly",
-           "Activates both GrabOnlyKeyboard and GrabOnlyMouse.",
+           "Activates GrabOnlyKeyboard, GrabOnlyMouse and GrabOnlyClipboard.",
            false);
 core::BoolParameter
   grabToggleWithRightCtrl("GrabToggleWithRightCtrl",
@@ -312,6 +316,7 @@ static core::VoidParameter* parameterArray[] = {
   &viewOnly,
   &grabOnlyKeyboard,
   &grabOnlyMouse,
+  &grabOnlyClipboard,
   &grabOnly,
   &grabToggleWithRightCtrl,
   &grabToggleWithMiddleButton,

@@ -65,6 +65,7 @@ extern core::BoolParameter viewOnly;
 
 extern core::BoolParameter grabOnlyKeyboard;
 extern core::BoolParameter grabOnlyMouse;
+extern core::BoolParameter grabOnlyClipboard;
 extern core::BoolParameter grabOnly;
 extern core::BoolParameter grabToggleWithRightCtrl;
 extern core::BoolParameter grabToggleWithMiddleButton;
