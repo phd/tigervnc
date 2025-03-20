@@ -652,6 +652,8 @@ int main(int argc, char** argv)
   // Check if the server name in reality is a configuration file
   potentiallyLoadConfigurationFile(vncServerName);
 
+  parseOptionsFlags();
+
   create_base_dirs();
 
   network::Socket* sock = nullptr;
