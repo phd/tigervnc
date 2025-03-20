@@ -268,7 +268,7 @@ void Viewport::showCursor()
 
 void Viewport::handleClipboardRequest()
 {
-  if (viewOnly)
+  if (viewOnly || ungrabbedGrabOnlyClipboard())
     return;
 
   Fl::paste(*this, clipboardSource);
@@ -276,7 +276,7 @@ void Viewport::handleClipboardRequest()
 
 void Viewport::handleClipboardAnnounce(bool available)
 {
-  if (viewOnly)
+  if (viewOnly || ungrabbedGrabOnlyClipboard())
     return;
 
   if (!acceptClipboard)
@@ -301,6 +301,9 @@ void Viewport::handleClipboardAnnounce(bool available)
 void Viewport::handleClipboardData(const char* data)
 {
   size_t len;
+
+  if (viewOnly || ungrabbedGrabOnlyClipboard())
+    return;
 
   if (!hasFocus())
     return;
@@ -431,6 +434,9 @@ int Viewport::handle(int event)
 
   switch (event) {
   case FL_PASTE:
+    if (viewOnly || ungrabbedGrabOnlyClipboard())
+      return 1;
+
     if (!core::isValidUTF8(Fl::event_text(), Fl::event_length())) {
       vlog.error("Invalid UTF-8 sequence in system clipboard");
       // Reset the state as if we don't have any clipboard data at all
@@ -584,7 +590,7 @@ void Viewport::handleClipboardChange(int source, void *data)
 
   assert(self);
 
-  if (viewOnly)
+  if (viewOnly || self->ungrabbedGrabOnlyClipboard())
     return;
 
   if (!sendClipboard)
@@ -635,6 +641,9 @@ void Viewport::handleClipboardChange(int source, void *data)
 
 void Viewport::flushPendingClipboard()
 {
+  if (viewOnly || ungrabbedGrabOnlyClipboard())
+    return;
+
   if (pendingClientClipboard) {
     vlog.debug("Focus regained after local clipboard change, notifying server");
     try {
@@ -1122,6 +1131,13 @@ bool Viewport::ungrabbedGrabOnlyKeyboard() const {
 bool Viewport::ungrabbedGrabOnlyMouse() const {
   if (grabOnly || grabOnlyMouse) {
     return !((DesktopWindow*)window())->isMouseGrabbed();
+  }
+  return false;
+}
+
+bool Viewport::ungrabbedGrabOnlyClipboard() const {
+  if (grabOnly || grabOnlyClipboard) {
+    return !((DesktopWindow*)window())->isKeyboardGrabbed();
   }
   return false;
 }
