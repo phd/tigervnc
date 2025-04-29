@@ -62,6 +62,8 @@ public:
   void handleClipboardAnnounce(bool available);
   void handleClipboardData(const char* data);
 
+  void flushPendingClipboard();
+
   // Fl_Widget callback methods
 
   void draw() override;
@@ -81,8 +83,6 @@ private:
   void showCursor();
 
   static void handleClipboardChange(int source, void *data);
-
-  void flushPendingClipboard();
 
   void handlePointerEvent(const core::Point& pos, uint16_t buttonMask);
   static void handlePointerTimeout(void *data);
