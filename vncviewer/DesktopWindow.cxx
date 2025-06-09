@@ -942,9 +942,11 @@ int DesktopWindow::handle(int event)
     break;
 
   case FL_SHOW:
+  case FL_FOCUS:
     cc->enableUpdates(true);
     break;
   case FL_HIDE:
+  case FL_UNFOCUS:
     cc->enableUpdates(false);
     break;
   }
